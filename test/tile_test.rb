@@ -14,11 +14,29 @@ class TestExample < Test::Unit::TestCase
 
 	def test_a_tile_stays_dead
 		[0,1,4,5,6,7,8].each do |num|
-			assert_dead_when(num)
+			assert_dead_when(false, num)
 		end
 	end
 	
-	
+	def test_a_tile_stays_alive
+		sut = Tile.new(true)
+		
+		sut.neighbours = get_active_tiles(2)
+		sut.calculate_next_state!
+		sut.commit_state!
+		
+		assert sut.alive?
+		
+	end
+
+	def test_a_tile_dies
+		[0,1,4,5,6,7,8].each do |num|
+			assert_dead_when(true, num)
+		end
+	end
+
+
+
 		
 	private
 	
@@ -38,13 +56,13 @@ class TestExample < Test::Unit::TestCase
 		neighbours
 	end
 	
-	def assert_dead_when(num_active)
-		sut = Tile.new(false)
+	def assert_dead_when(init_state, num_active)
+		sut = Tile.new(init_state)
 		sut.neighbours = get_active_tiles(num_active)
 		
 		sut.calculate_next_state!
 		sut.commit_state!
 		
-		assert !sut.alive?
+		assert_equal false, sut.alive?
 	end
 end

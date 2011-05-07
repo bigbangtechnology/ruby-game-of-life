@@ -18,9 +18,16 @@ class Tile
 		if !self.alive? 
 			if life_counter == 3
 				@next_state = true
+				return 
+			end
+		else
+			if life_counter == 2 || life_counter == 3
+				@next_state = true
+				return 
 			end
 		end
 		
+		@next_state = false
 	end
 	
 	def commit_state!
